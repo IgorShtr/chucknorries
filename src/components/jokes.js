@@ -1,26 +1,73 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-// import axios from 'axios';
+import Heart from './images/heart.png';
+import HeartColored from './images/heartColored.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCommentAlt} from '@fortawesome/free-solid-svg-icons';  
 
 export const Jokes = props =>{
+  const {jokesList, type, setFavouritesList} = props;
 
-const {jokesList} = props;
-  const jokeContent = jokesList.map(({id, value, updated_at, categories})=>{
-    console.log(!categories.length)
+  const [idList, setIdList] = useState([]);
+ 
+   console.log(jokesList)
+
+   useEffect(()=>{
+    let localArrey = JSON.parse(localStorage.getItem("jokes"))!==null ? JSON.parse(localStorage.getItem("jokes")) : [];
+    const idArrey = localArrey.map(({id})=>id)     
+    setIdList(idArrey)
+  }, [jokesList])
+  ;
+
+
+  const jokeContent =(jokesList !==null)? (jokesList.map(({id, value, updated_at, categories})=>{
+  
     const presentTime = new Date()
     const updatedTime = new Date(updated_at)
     const hoursPast =(presentTime.getTime()- updatedTime.getTime())/3600000
-    console.log()
+
+    const checkId= idList.filter((item)=> item===id);    
+    const favorite =checkId.length ? true : false;
+   
+
+    const addToFavourite = () =>{  
+           
+    if  (!favorite){
+    let localArrey = JSON.parse(localStorage.getItem("jokes"))!==null ? JSON.parse(localStorage.getItem("jokes")) : [];
+
+    const favouriteItem = {
+      id,
+      value,
+      updated_at,
+      categories
+    };  
+
+    localArrey.push(favouriteItem);
+    // console.log(localArrey)
+    localStorage.setItem("jokes", JSON.stringify(localArrey));
+    const idArrey = localArrey.map(({id})=>id);     
+    setIdList(idArrey);
+    setFavouritesList(JSON.parse(localStorage.getItem("jokes")))
+    } 
+    else{
+      let localArrey = JSON.parse(localStorage.getItem("jokes"))!==null ? JSON.parse(localStorage.getItem("jokes")) : [];
+      const filtredArrey = localArrey.filter((item)=>item.id!==id)
+      const idArrey = filtredArrey.map(({id})=>id);     
+      setIdList(idArrey);
+      localStorage.setItem("jokes", JSON.stringify(filtredArrey));
+      setFavouritesList(JSON.parse(localStorage.getItem("jokes")))
+    };     
+    };
+    
+
     return (
-    <JokeContainer>
+    <JokeContainer type={type} key={uuidv4()}>
       <Icon>
          <FontAwesomeIcon icon={faCommentAlt} />
-      </Icon>
-        <Heart/>
-       <div>
+      </Icon>        
+       <MainSection>
+            <HeartMarker onClick={addToFavourite} favorite={favorite}/>
            <IdSection>
             <p>ID:</p>
             <p>{id}</p>
@@ -29,12 +76,11 @@ const {jokesList} = props;
           <MainText>{value}</MainText>
           <BottomSection>
              <p>Last update:{Math.floor(hoursPast)} hours ago</p>
-            {categories ? <div>{categories[0]}</div> : null}
+            {(categories != undefined) && (categories.length)   ? <div>{categories[0]}</div> : null}
           </BottomSection>
-       </div>      
-         
+       </MainSection>       
     </JokeContainer>)
-})
+})) : null;
     return (
       <>
      {jokeContent}
@@ -43,25 +89,40 @@ const {jokesList} = props;
 }
 
 const JokeContainer = styled.div`
+width:${props=> props.type ? "70%" : "none"};
 display: flex;
 align-items: center;
-width: 100%;
-background: #F8F8F8;
+justify-content: space-around;
+// height: 225px;
+// background: ;
+background:${props=> props.type ? "#FFFFFF" : "#F8F8F8"};
 border-radius: 20px;
-height: 225px;
-padding: 40px 40px 46px 40px;
+padding: 40px;
 margin: 20px 0;
 overflow: hidden;
 `
 const Icon = styled.div`
 background: #FFFFFF;
- width: 40px;
+height: 40px;
+width: 40px;
+line-height: 40px;
 margin-right: 20px;
 border-radius: 50%;
 text-align: center;
 `
-const Heart = styled.div`
+const MainSection = styled.div`
+display: flex;
+flex-direction: column;
+// padding-right: 40px;
 
+`
+const HeartMarker = styled.div`
+width: 20px;
+height: 17px;
+background: url(${props=>props.favorite ? HeartColored : Heart}) no-repeat right center;
+background-size: 20px 17px;
+align-self: flex-end;
+margin-bottom:10px;
 `
 const IdSection = styled.div`
 display:flex;
@@ -75,10 +136,12 @@ color: #ABABAB;
 const BottomSection = styled.div`
 display:flex;
 justify-content: space-between;
+align-items: center;
 p{
   color: #ABABAB;
   font-size: 10px;
   padding: 0;
+  margin: 0;
 }
 div{
   height: fit-content;
@@ -95,7 +158,7 @@ div{
 }
 `
 const MainText = styled.p`
-  max-width: 100%;
+  max-width: 320px;
   overflow: hidden;
   font-size: 18px;
   margin-bottom: 23px;

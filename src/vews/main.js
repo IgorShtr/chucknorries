@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,  } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,8 +17,11 @@ export const MainView = () => {
   const [isTextsearchShown, setIsTextsearchShown] = useState(false);
   const [textInputValue, setTextInputValue] = useState("");
   const [chosenCategory, setChosenCategory] = useState();
+  const [favouritesList, setFavouritesList] = useState([]);
+  
 
  
+//  console.log(favouritesList);
 const getJokeList = ()=>{
   const form = document.querySelectorAll("input");
   let actInput = null;
@@ -81,10 +84,13 @@ const getInputQuery = (e) =>{
       }      
     } 
   };
+  useEffect(()=>{
+    setFavouritesList(JSON.parse(localStorage.getItem("jokes")))
+  }, [])  
 
   return (
     <Container>
-      <SectinSearch>
+      <SearchSection>
          <h3>MSI 2020</h3>
         <h1>Hey!</h1>
         <p>Let’s try to find a joke for you:</p>
@@ -93,45 +99,79 @@ const getInputQuery = (e) =>{
           <p><input name="SearchMethod" type="radio" value="FromCaterogies" /> From caterogies</p>
           {isCategoriesShown && <CategoriesList setChosenCategory={setChosenCategory}/>}
           <p><input name="SearchMethod" type="radio" value="Search" /> Search</p>
-          {isTextsearchShown && <TextSearch 
+          
+        </SearchType>
+        {isTextsearchShown && <TextSearch 
                                   type="text" 
                                   placeholder="Free text search..."
                                   onChange={getInputQuery}/>}
-        </SearchType>
         <GetJokeBtn onClick={getJokeList}>Get a joke</GetJokeBtn>
-       <Jokes jokesList={jokesList}/>
-      </SectinSearch>
-          
+       <Jokes jokesList={jokesList} setFavouritesList={setFavouritesList}/>
+      </SearchSection>
+      <FavoriteSection>
+        <p>Favourite</p>
+        <Jokes jokesList={favouritesList!=='null' ? favouritesList : null} type={"favourite"} setFavouritesList={setFavouritesList}/>
+      </FavoriteSection>    
     </Container>
   );
 };
 
 const Container = styled.div`
-margin-left: 140px;
+display: flex;
+
+`
+const SearchSection = styled.div`
+margin: 40px auto;
+// margin-left: 140px;
+// width: 65%;
+// display: flex;
+// flex-direction: column;
+// align-items: center;
 & h3 {
   margin-top: 40px;
+  width: 100%
 }
 & h1 {
   margin-top: 78px;
   margin-bottom: 0px;
+  width: 100%
 }
 & >p {
   margin: 0;  
   font-weight: 500;
   font-size: 24px;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
+  width: 100% 
 }
-`
-const SectinSearch = styled.div`
-width: 65%;
+
 `
 const SearchType = styled.form`
-margin-top: 43px; 
+margin-top: 43px;
+width: 100%;
 & >p {
   font-size: 18px;
   font-weight: 400;
 
 }
+`
+const FavoriteSection = styled.div`
+width: 35%;
+background: #F8F8F8;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+& >p {
+  align-self: start;
+  color: #ABABAB;
+  font-weight: 500;
+  font-size: 20px;
+  font-family: Roboto;
+  font-style: normal;
+  // margin: 40px 0 20px;
+
+}
+
 `
 const GetJokeBtn = styled.div`
 padding: 10px 40px; 
@@ -143,11 +183,15 @@ cursor: pointer;
 `
 
 const TextSearch = styled.input`
-width: 100%;
+width: -webkit-fill-available;
 border: 2px solid #333333;
 border-radius: 10px; 
 padding: 10px 0 10px 15px;
 margin-bottom: 20px;
+:active, :hover, :focus {
+  outline: 0;
+  outline-offset: 0;
+}
 `
 
 // const JokeContainer = styled.div`
