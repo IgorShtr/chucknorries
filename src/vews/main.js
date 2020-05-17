@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
-import {mediaTablet, mediaMobile, mediaDesktop} from '../globalStyles/mediaBreakPoints'
+import { mediaTablet, mediaMobile, mediaDesktop } from '../globalStyles/mediaBreakPoints'
 import { StateContext, ActionState } from '../components/stateContext';
-import {HeaderMobile} from '../components/headerMobile'
+import { HeaderMobile } from '../components/headerMobile'
 import { CategoriesList } from '../components/categories';
-import {Jokes} from '../components/jokes';
+import { Jokes } from '../components/jokes';
 // import {FavouriteMobBtn} from '../components/favouriteBtn';
-import {FavouriteModal} from '../components/FavoriteModal'
+import { FavouriteModal } from '../components/FavoriteModal'
 
 
 
 
 export const MainView = (props) => {
-  const {isActive} = useContext(StateContext);
+  const { isActive } = useContext(StateContext);
 
   const [jokesList, setJokesList] = useState([]);
   const [isCategoriesShown, setIsCategoriesShown] = useState(false);
@@ -24,121 +24,119 @@ export const MainView = (props) => {
   const [chosenCategory, setChosenCategory] = useState();
   const [favouritesList, setFavouritesList] = useState([]);
   const [idList, setIdList] = useState([]);
-  
+
   console.log(props)
 
-const getJokeList = ()=>{
-  const form = document.querySelectorAll("input");
-  let actInput = null;
-  form.forEach((item)=>item.checked && (actInput =item.value));  
-  const query = ()=>{
-    switch(actInput){
-    case "FromCaterogies":{
-      return (`/random?category=${chosenCategory}`)
-    }
-    case "Search":{
+  const getJokeList = () => {
+    const form = document.querySelectorAll("input");
+    let actInput = null;
+    form.forEach((item) => item.checked && (actInput = item.value));
+    const query = () => {
+      switch (actInput) {
+        case "FromCaterogies": {
+          return (`/random?category=${chosenCategory}`)
+        }
+        case "Search": {
 
-      return (`/search?query=${textInputValue}`)
-    }
-    default:{
-      return (`/random`)
-    }      
-  }
-};
+          return (`/search?query=${textInputValue}`)
+        }
+        default: {
+          return (`/random`)
+        }
+      }
+    };
 
 
-  const baseUrl = `https://api.chucknorris.io/jokes`  
-  axios
-        .get(baseUrl+query())
-        .then(result => {
-          console.log(result)
-          for (let key in result.data){
-            if (key ==="result") {
-            setJokesList(result.data.result);                       
-            }
-            else {
-             setJokesList([result.data]);
-            } 
-           }
-          
-        })
-        .catch(err => {
-          console.log(err);
-        });  
-};
+    const baseUrl = `https://api.chucknorris.io/jokes`
+    axios
+      .get(baseUrl + query())
+      .then(result => {
+        console.log(result)
+        for (let key in result.data) {
+          if (key === "result") {
+            setJokesList(result.data.result);
+          }
+          else {
+            setJokesList([result.data]);
+          }
+        }
 
-const getInputQuery = (e) =>{
-  e.preventDefault();
-  setTextInputValue(e.target.value);
-};
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const getInputQuery = (e) => {
+    e.preventDefault();
+    setTextInputValue(e.target.value);
+  };
 
 
   const handlerChoice = (e) => {
-    switch(e.target.value){
-      case "FromCaterogies":{
+    switch (e.target.value) {
+      case "FromCaterogies": {
         return (setIsCategoriesShown(true), setIsTextsearchShown(false))
       }
-      case "Search":{
+      case "Search": {
         return (setIsTextsearchShown(true), setIsCategoriesShown(false))
       }
-      case "Random":{
+      case "Random": {
         return (setIsTextsearchShown(false), setIsCategoriesShown(false))
       }
-      default:{
+      default: {
         return (setIsCategoriesShown(false))
-      }      
-    } 
+      }
+    }
   };
-  useEffect(()=>{
+  useEffect(() => {
     setFavouritesList(JSON.parse(localStorage.getItem("jokes")))
-  }, [])  
+  }, [])
 
   return (
-    <Container> 
-      <ActionState>     
-      <SearchSection>
-          {/* <ActionState> */}
-            <HeaderMobile/>  
-          {/* </ActionState>          */}
-        <HeaderDesktop>
-          <h3>MSI 2020</h3>
-        </HeaderDesktop>         
-        <h1>Hey!</h1>
-        <p>Let’s try to find a joke for you:</p>
-        <SearchType onChange={handlerChoice}>
-          <p><input name="SearchMethod" type="radio" value="Random" /> Random</p>
-          <p><input name="SearchMethod" type="radio" value="FromCaterogies" /> From caterogies</p>
-          {isCategoriesShown && <CategoriesList setChosenCategory={setChosenCategory}/>}
-          <p><input name="SearchMethod" type="radio" value="Search" /> Search</p>
-          
-        </SearchType>
-        {isTextsearchShown && <TextSearch 
-                                  type="text" 
-                                  placeholder="Free text search..."
-                                  onChange={getInputQuery}/>}
-        <GetJokeBtn onClick={getJokeList}>Get a joke</GetJokeBtn>
-       <Jokes jokesList={jokesList} 
-              setFavouritesList={setFavouritesList} 
-              idList={idList} 
-              setIdList={setIdList}/>
-      </SearchSection>
-      <FavoriteSection>
-        <p>Favourite</p>
-        <Jokes 
-                jokesList={favouritesList!=='null' ? favouritesList : null}
-                type={"favourite"} 
-                setFavouritesList={setFavouritesList} 
-                idList={idList} 
-                setIdList={setIdList}/>
-      </FavoriteSection>
-      <FavouriteModal
-      jokesList={favouritesList!=='null' ? favouritesList : null}
-                type={"favourite"} 
-                setFavouritesList={setFavouritesList}
-                 favouritesList = {favouritesList}
-                idList={idList} 
-                setIdList={setIdList}/> 
-    </ActionState>
+    <Container>
+      <ActionState>
+        <SearchSection>
+          <HeaderMobile />
+          <HeaderDesktop>
+            <p>MSI 2020</p>
+          </HeaderDesktop>
+          <HeyHeading>Hey!</HeyHeading>
+          <InvitText>Let’s try to find a joke for you:</InvitText>
+          <SearchType onChange={handlerChoice} onSubmit={getJokeList}>
+            <p><input name="SearchMethod" type="radio" value="Random" /> Random</p>
+            <p><input name="SearchMethod" type="radio" value="FromCaterogies" /> From caterogies</p>
+            {isCategoriesShown && <CategoriesList setChosenCategory={setChosenCategory} />}
+            <p><input name="SearchMethod" type="radio" value="Search" /> Search</p>
+
+          </SearchType>
+          {isTextsearchShown && <TextSearch
+            type="text"
+            placeholder="Free text search..."
+            onChange={getInputQuery} />}
+          <GetJokeBtn onClick={getJokeList}>Get a joke</GetJokeBtn>
+          <Jokes jokesList={jokesList}
+            setFavouritesList={setFavouritesList}
+            idList={idList}
+            setIdList={setIdList} />
+        </SearchSection>
+        <FavoriteSection>
+          <p>Favourite</p>
+          <Jokes
+            jokesList={favouritesList !== 'null' ? favouritesList : null}
+            type={"favourite"}
+            setFavouritesList={setFavouritesList}
+            idList={idList}
+            setIdList={setIdList} />
+        </FavoriteSection>
+        <FavouriteModal
+          jokesList={favouritesList !== 'null' ? favouritesList : null}
+          type={"favourite"}
+          setFavouritesList={setFavouritesList}
+          favouritesList={favouritesList}
+          idList={idList}
+          setIdList={setIdList} />
+      </ActionState>
     </Container>
   );
 };
@@ -154,9 +152,12 @@ ${mediaTablet(`
 ${mediaMobile(`
  display: none;
 `)}
-& h3 {  
+& >p {  
   width: 100%;
   margin:0;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 28px;
 }
 `
 const SearchSection = styled.div`
@@ -170,27 +171,45 @@ ${mediaMobile(`
 padding: 20px;
 width: 100%;
 `)}
-& h1 {
-  margin-top: 78px;
-  margin-bottom: 0px;
-  width: 100%
-}
-& >p {
-  margin: 0;  
-  font-weight: 500;
-  font-size: 24px;
-  margin-bottom: 10px;
-  width: 100% 
-}
-
+// & >p :nth-child(3) {
+//   margin-top: 78px;
+//   margin-bottom: 0px;
+//   width: 100%
+// }
+// & >p {
+//   margin: 0;  
+//   font-weight: 500;
+//   font-size: 24px;
+//   margin-bottom: 10px;
+//   width: 100% 
+// }
 `
+const HeyHeading = styled.p`
+margin-top: 78px;
+margin-bottom: 0;
+width: 100%;
+font-family: Roboto;
+font-style: normal;
+font-weight: bold;
+font-size: 32px;
+line-height: 44px;
+`
+const InvitText = styled.p`
+margin: 0;
+width: 100%;
+font-family: Roboto;
+font-style: normal;
+font-weight: 500;
+font-size: 24px;
+line-height: 44px;
+` 
 const SearchType = styled.form`
 margin-top: 43px;
 width: 100%;
 & >p {
+  font-weight: normal;
   font-size: 18px;
-  font-weight: 400;
-
+  line-height: 26px;
 }
 `
 const GetJokeBtn = styled.div`
@@ -228,7 +247,7 @@ display: none;
 `)}
 
 & >p { 
-  width: 80%;
+  width: 100%;
   color: #ABABAB;
   font-weight: 500;
   font-size: 20px;

@@ -87,6 +87,7 @@ export const Jokes = props =>{
 }
 
 const JokeContainer = styled.div`
+width: -webkit-fill-available;
 display: flex;
 align-items: center;
 justify-content: space-around;
@@ -117,6 +118,7 @@ background: url(${props=>props.favorite ? HeartColored : Heart}) no-repeat right
 background-size: 20px 17px;
 align-self: flex-end;
 margin-bottom:10px;
+padding-top: 2px;
 `
 const IdSection = styled.div`
 display:flex;

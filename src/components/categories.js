@@ -77,7 +77,8 @@ display: flex;
 flex-wrap:wrap;
 `
 const CategoryButton = styled.div`
-  margin-right:10px;
+margin-right:10px;
+margin-bottom:10px;
  padding: 6px 15px; 
  border:2px solid #F8F8F8;
  border-radius: 6px;
