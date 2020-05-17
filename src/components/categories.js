@@ -70,6 +70,7 @@ export const CategoriesList = props => {
   )
 }
 const Caterogies = styled.div`
+width: inherit;
 margin-top: 20px; 
 margin-bottom: 10px; 
 display: flex;

@@ -1,16 +1,21 @@
-import React, { useState, useEffect,  } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
+import {mediaTablet, mediaMobile, mediaDesktop} from '../globalStyles/mediaBreakPoints'
 import { StateContext, ActionState } from '../components/stateContext';
+import {HeaderMobile} from '../components/headerMobile'
 import { CategoriesList } from '../components/categories';
-import {Jokes} from '../components/jokes'
+import {Jokes} from '../components/jokes';
+// import {FavouriteMobBtn} from '../components/favouriteBtn';
+import {FavouriteModal} from '../components/FavoriteModal'
 
 
 
 
-export const MainView = () => {
+export const MainView = (props) => {
+  const {isActive} = useContext(StateContext);
 
   const [jokesList, setJokesList] = useState([]);
   const [isCategoriesShown, setIsCategoriesShown] = useState(false);
@@ -18,10 +23,10 @@ export const MainView = () => {
   const [textInputValue, setTextInputValue] = useState("");
   const [chosenCategory, setChosenCategory] = useState();
   const [favouritesList, setFavouritesList] = useState([]);
+  const [idList, setIdList] = useState([]);
   
+  console.log(props)
 
- 
-//  console.log(favouritesList);
 const getJokeList = ()=>{
   const form = document.querySelectorAll("input");
   let actInput = null;
@@ -89,9 +94,15 @@ const getInputQuery = (e) =>{
   }, [])  
 
   return (
-    <Container>
+    <Container> 
+      <ActionState>     
       <SearchSection>
-         <h3>MSI 2020</h3>
+          {/* <ActionState> */}
+            <HeaderMobile/>  
+          {/* </ActionState>          */}
+        <HeaderDesktop>
+          <h3>MSI 2020</h3>
+        </HeaderDesktop>         
         <h1>Hey!</h1>
         <p>Let’s try to find a joke for you:</p>
         <SearchType onChange={handlerChoice}>
@@ -106,31 +117,59 @@ const getInputQuery = (e) =>{
                                   placeholder="Free text search..."
                                   onChange={getInputQuery}/>}
         <GetJokeBtn onClick={getJokeList}>Get a joke</GetJokeBtn>
-       <Jokes jokesList={jokesList} setFavouritesList={setFavouritesList}/>
+       <Jokes jokesList={jokesList} 
+              setFavouritesList={setFavouritesList} 
+              idList={idList} 
+              setIdList={setIdList}/>
       </SearchSection>
       <FavoriteSection>
         <p>Favourite</p>
-        <Jokes jokesList={favouritesList!=='null' ? favouritesList : null} type={"favourite"} setFavouritesList={setFavouritesList}/>
-      </FavoriteSection>    
+        <Jokes 
+                jokesList={favouritesList!=='null' ? favouritesList : null}
+                type={"favourite"} 
+                setFavouritesList={setFavouritesList} 
+                idList={idList} 
+                setIdList={setIdList}/>
+      </FavoriteSection>
+      <FavouriteModal
+      jokesList={favouritesList!=='null' ? favouritesList : null}
+                type={"favourite"} 
+                setFavouritesList={setFavouritesList}
+                 favouritesList = {favouritesList}
+                idList={idList} 
+                setIdList={setIdList}/> 
+    </ActionState>
     </Container>
   );
 };
 
 const Container = styled.div`
 display: flex;
+`
 
+const HeaderDesktop = styled.div`
+${mediaTablet(`
+  display: none;
+`)}
+${mediaMobile(`
+ display: none;
+`)}
+& h3 {  
+  width: 100%;
+  margin:0;
+}
 `
 const SearchSection = styled.div`
-margin: 40px auto;
-// margin-left: 140px;
-// width: 65%;
-// display: flex;
-// flex-direction: column;
-// align-items: center;
-& h3 {
-  margin-top: 40px;
-  width: 100%
-}
+padding: 40px 140px;
+width: 65%;
+${mediaTablet(`
+padding: 40px;
+width: 100%;
+`)}
+${mediaMobile(`
+padding: 20px;
+width: 100%;
+`)}
 & h1 {
   margin-top: 78px;
   margin-bottom: 0px;
@@ -154,25 +193,6 @@ width: 100%;
 
 }
 `
-const FavoriteSection = styled.div`
-width: 35%;
-background: #F8F8F8;
-height: 100%;
-display: flex;
-flex-direction: column;
-align-items: center;
-& >p {
-  align-self: start;
-  color: #ABABAB;
-  font-weight: 500;
-  font-size: 20px;
-  font-family: Roboto;
-  font-style: normal;
-  // margin: 40px 0 20px;
-
-}
-
-`
 const GetJokeBtn = styled.div`
 padding: 10px 40px; 
 border-radius: 10px;
@@ -191,27 +211,34 @@ margin-bottom: 20px;
 :active, :hover, :focus {
   outline: 0;
   outline-offset: 0;
+}`
+
+const FavoriteSection = styled.div`
+width: 35%;
+background: #F8F8F8;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 40px;
+${mediaTablet(`
+display: none;
+`)}
+${mediaMobile(`
+display: none;
+`)}
+
+& >p { 
+  width: 80%;
+  color: #ABABAB;
+  font-weight: 500;
+  font-size: 20px;
+  font-family: Roboto;
+  font-style: normal;
+  margin: 0;
 }
 `
 
-// const JokeContainer = styled.div`
-// width: 100%;
-// background: #F8F8F8;
-// border-radius: 20px;
-// height: 225px;
-// padding: 40px 40px 46px 40px;
-// margin: 20px 0;
-// overflow: hidden;
-// p:first-child{
 
-// }
-// `
-// const BottomSection = styled.div`
-// display:flex;
-// justify-content: space-between;
-// `
-// const MainText = styled.p`
-//   max-width: 100%;
-//   overflow: hidden;
-//   font-size: 18px;
-// `
+
+
+

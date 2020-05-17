@@ -7,11 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCommentAlt} from '@fortawesome/free-solid-svg-icons';  
 
 export const Jokes = props =>{
-  const {jokesList, type, setFavouritesList} = props;
+  const {jokesList, type, setFavouritesList,idList, setIdList} = props;
 
-  const [idList, setIdList] = useState([]);
- 
-   console.log(jokesList)
+   console.log(type)
 
    useEffect(()=>{
     let localArrey = JSON.parse(localStorage.getItem("jokes"))!==null ? JSON.parse(localStorage.getItem("jokes")) : [];
@@ -63,7 +61,7 @@ export const Jokes = props =>{
 
     return (
     <JokeContainer type={type} key={uuidv4()}>
-      <Icon>
+      <Icon type={type}>
          <FontAwesomeIcon icon={faCommentAlt} />
       </Icon>        
        <MainSection>
@@ -73,7 +71,7 @@ export const Jokes = props =>{
             <p>{id}</p>
           </IdSection>
           
-          <MainText>{value}</MainText>
+          <MainText type={type} >{value}</MainText>
           <BottomSection>
              <p>Last update:{Math.floor(hoursPast)} hours ago</p>
             {(categories != undefined) && (categories.length)   ? <div>{categories[0]}</div> : null}
@@ -89,20 +87,17 @@ export const Jokes = props =>{
 }
 
 const JokeContainer = styled.div`
-width:${props=> props.type ? "70%" : "none"};
 display: flex;
 align-items: center;
 justify-content: space-around;
-// height: 225px;
-// background: ;
 background:${props=> props.type ? "#FFFFFF" : "#F8F8F8"};
 border-radius: 20px;
-padding: 40px;
+padding: ${props=> props.type ? "20px" : "40px"};;
 margin: 20px 0;
 overflow: hidden;
 `
 const Icon = styled.div`
-background: #FFFFFF;
+background: ${props=> props.type ? "#F8F8F8" : "#FFFFFF"};
 height: 40px;
 width: 40px;
 line-height: 40px;
@@ -113,8 +108,7 @@ text-align: center;
 const MainSection = styled.div`
 display: flex;
 flex-direction: column;
-// padding-right: 40px;
-
+width: 80%;
 `
 const HeartMarker = styled.div`
 width: 20px;
@@ -158,9 +152,9 @@ div{
 }
 `
 const MainText = styled.p`
-  max-width: 320px;
+  max-width: 620px;
   overflow: hidden;
-  font-size: 18px;
+  font-size:${props=> props.type ? "14px" : "18px"}; ;
   margin-bottom: 23px;
   margin-top: 5px;
 `

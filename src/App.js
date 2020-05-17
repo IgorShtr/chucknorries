@@ -1,14 +1,12 @@
 import React from 'react';
 import { BrowserRouter as HashRouter, Route, Switch, Redirect } from 'react-router-dom';
-// import { Provider } from 'react-redux'
-// import store from './store/index'
 import { MainView } from './vews/main';
-// import { FilmDetails } from './components/filmDetails';
+// import {  ActionState } from '../components/stateContext';
 
 
 function App() {
   return (
-    // <Provider store={store}>
+    // <ActionState>  
       <HashRouter basename="/filmsList">
         <Switch>
           <Route exect path='/chucknorris' component={MainView} />
@@ -16,7 +14,7 @@ function App() {
           <Redirect to="/chucknorris" />
         </Switch>
       </HashRouter>
-    // </Provider>
+      // </ActionState>
   );
 }
 
