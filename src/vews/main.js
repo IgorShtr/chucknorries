@@ -101,11 +101,11 @@ export const MainView = (props) => {
           </HeaderDesktop>
           <HeyHeading>Hey!</HeyHeading>
           <InvitText>Let’s try to find a joke for you:</InvitText>
-          <SearchType onChange={handlerChoice} onSubmit={getJokeList}>
-            <p><input name="SearchMethod" type="radio" value="Random" /> Random</p>
-            <p><input name="SearchMethod" type="radio" value="FromCaterogies" /> From caterogies</p>
+          <SearchType onChange={handlerChoice} onSubmit={getJokeList}>           
+              <label><input name="SearchMethod" type="radio" value="Random" />Random</label>      
+            <label><input name="SearchMethod" type="radio" value="FromCaterogies" /> From caterogies</label>
             {isCategoriesShown && <CategoriesList setChosenCategory={setChosenCategory} />}
-            <p><input name="SearchMethod" type="radio" value="Search" /> Search</p>
+            <label><input name="SearchMethod" type="radio" value="Search" /> Search</label>
 
           </SearchType>
           {isTextsearchShown && <TextSearch
@@ -192,13 +192,18 @@ line-height: 44px;
 const SearchType = styled.form`
 margin-top: 43px;
 width: 100%;
-& >p {
+display: flex;
+flex-direction: column;
+}
+& >label:not(:last-child) {
   font-weight: normal;
   font-size: 18px;
   line-height: 26px;
+  margin-bottom: 10px;
 }
 `
 const GetJokeBtn = styled.div`
+margin-top: 20px;
 padding: 10px 40px; 
 border-radius: 10px;
 background: linear-gradient(92.01deg, #8EA7FF 0%, #7291FF 100%);
@@ -212,7 +217,7 @@ width: -webkit-fill-available;
 border: 2px solid #333333;
 border-radius: 10px; 
 padding: 10px 0 10px 15px;
-margin-bottom: 20px;
+margin-top: 20px;
 :active, :hover, :focus {
   outline: 0;
   outline-offset: 0;

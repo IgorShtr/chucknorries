@@ -1,20 +1,17 @@
 import React from 'react';
 import { BrowserRouter as HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { MainView } from './vews/main';
-// import {  ActionState } from '../components/stateContext';
+
 
 
 function App() {
-  return (
-    // <ActionState>  
+  return ( 
       <HashRouter basename="/chucknorris">
         <Switch>
-          <Route exect path='/chucknorris' component={MainView} />
-          {/* <Route path='/movieDetales/:id' component={FilmDetails} /> */}
+          <Route exect path='/chucknorris' component={MainView} />         
           <Redirect to="/chucknorris" />
         </Switch>
-      </HashRouter>
-      // </ActionState>
+      </HashRouter>    
   );
 }
 
