@@ -7,7 +7,7 @@ import { MainView } from './vews/main';
 function App() {
   return (
     // <ActionState>  
-      <HashRouter basename="/filmsList">
+      <HashRouter basename="/chucknorris">
         <Switch>
           <Route exect path='/chucknorris' component={MainView} />
           {/* <Route path='/movieDetales/:id' component={FilmDetails} /> */}
