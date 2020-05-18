@@ -4,17 +4,17 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
 export const CategoriesList = props => {
-  const {setChosenCategory} = props
-  const [categoriesList, setCategoriesList] = useState([]);  
+  const { setChosenCategory } = props
+  const [categoriesList, setCategoriesList] = useState([]);
   const [activeCategories, setActiveCategories] = useState([]);
-  const caterogiesInishState =[];  
-  
-  useLayoutEffect(() => {   
+  const caterogiesInishState = [];
+
+  useLayoutEffect(() => {
     const url = `https://api.chucknorris.io/jokes/categories`
     axios
       .get(url)
       .then(result => {
-        setCategoriesList(result.data);        
+        setCategoriesList(result.data);
       })
       .catch(err => {
         console.log(err);
@@ -22,41 +22,45 @@ export const CategoriesList = props => {
 
   }, [])
 
-  categoriesList.length && categoriesList.forEach((item, index)=> {
-    const stateItem ={
-      name:item,
-      isActive: (index===0) ? true : false,
-    }    
-     caterogiesInishState.push(stateItem);  
+  categoriesList.length && categoriesList.forEach((item, index) => {
+    const stateItem = {
+      name: item,
+      isActive: (index === 0) ? true : false,
+    }
+    caterogiesInishState.push(stateItem);
   });
 
-    
- useEffect(()=>{
-  setActiveCategories(caterogiesInishState);  
- }, [categoriesList]) 
+
+  useEffect(() => {
+    setActiveCategories(caterogiesInishState);
+  }, [categoriesList])
 
 
-  const setCategoryAct = (e) => {  
+  const setCategoryAct = (e) => {
     const names = activeCategories.map(({ name }) => name);
     const newStateActivities = activeCategories.map(({ name, isActive }) => (name === e.target.parentNode.classList[2]) && (isActive = !isActive));
-  
+
     const newState = [];
     names.forEach((item, index) => {
       const newItem = {
         name: item,
         isActive: newStateActivities[index]
       }
-      newState.push(newItem)   
-     
-    });    
-     setActiveCategories(newState)    
+      newState.push(newItem)
+
+    });
+    setActiveCategories(newState)
   }
 
   const categoriesVariants = activeCategories.map((item) => {
-    const { name, isActive } = item; 
+    const { name, isActive } = item;
     isActive && setChosenCategory(name)
     return (
-      <CategoryButton key={uuidv4()} isActive={isActive} className={name} onClick={setCategoryAct}>
+      <CategoryButton
+        key={uuidv4()}
+        isActive={isActive}
+        className={name}
+        onClick={setCategoryAct}>
         <p>{name}</p>
       </CategoryButton>
     )

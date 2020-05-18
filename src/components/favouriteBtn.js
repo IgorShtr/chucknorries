@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { StateContext  } from './stateContext';
-import {mediaTablet, mediaMobile, mediaDesktop} from '../globalStyles/mediaBreakPoints'
+import { StateContext } from './stateContext';
 
- export const FavouriteMobBtn = ()=>{
+export const FavouriteMobBtn = () => {
 
   const { isActive, toggleActive } = useContext(StateContext);
   console.log(isActive)
   return (
-    
+
     <HeaderFavourite>
-    <OpenFavourite className={isActive ? "active" : ""} onClick={()=>toggleActive()}>
-       <Bar/>
-       <Bar/>
-    </OpenFavourite>
-        <p>Favourite</p>
+      <OpenFavourite
+        className={isActive ? "active" : ""}
+        onClick={() => toggleActive()}>
+        <Bar />
+        <Bar />
+      </OpenFavourite>
+      <p>Favourite</p>
     </HeaderFavourite>
-    
+
   )
 }
 
@@ -49,12 +50,10 @@ span {
   transition: all 0.3s ease-in-out;
 }
 
-&.active { 
-
+&.active {
   span:first-child {
     transform: rotate(45deg) translate(1px, 2px);
   }
-
   span:last-child {
     transform: rotate(-45deg) translate(2px,-3px);
   }

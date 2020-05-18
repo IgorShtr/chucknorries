@@ -115,7 +115,8 @@ export const MainView = (props) => {
             placeholder="Free text search..."
             onChange={getInputQuery} />}
           <GetJokeBtn onClick={getJokeList}>Get a joke</GetJokeBtn>
-          <Jokes jokesList={jokesList}
+          <Jokes
+            jokesList={jokesList}
             setFavouritesList={setFavouritesList}
             idList={idList}
             setIdList={setIdList} />
@@ -144,7 +145,6 @@ export const MainView = (props) => {
 const Container = styled.div`
 display: flex;
 `
-
 const HeaderDesktop = styled.div`
 ${mediaTablet(`
   display: none;
@@ -171,18 +171,6 @@ ${mediaMobile(`
 padding: 20px;
 width: 100%;
 `)}
-// & >p :nth-child(3) {
-//   margin-top: 78px;
-//   margin-bottom: 0px;
-//   width: 100%
-// }
-// & >p {
-//   margin: 0;  
-//   font-weight: 500;
-//   font-size: 24px;
-//   margin-bottom: 10px;
-//   width: 100% 
-// }
 `
 const HeyHeading = styled.p`
 margin-top: 78px;
@@ -202,7 +190,7 @@ font-style: normal;
 font-weight: 500;
 font-size: 24px;
 line-height: 44px;
-` 
+`
 const SearchType = styled.form`
 margin-top: 43px;
 width: 100%;
@@ -234,6 +222,7 @@ margin-bottom: 20px;
 
 const FavoriteSection = styled.div`
 width: 35%;
+min-height: 100vw;
 background: #F8F8F8;
 display: flex;
 flex-direction: column;

@@ -1,29 +1,32 @@
-import React, { useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
+
 
 import { mediaMobile, } from '../globalStyles/mediaBreakPoints'
-import { StateContext} from './stateContext';
-import {FavouriteMobBtn} from './favouriteBtn';
-import {Jokes} from './jokes'
+import { StateContext } from './stateContext';
+import { FavouriteMobBtn } from './favouriteBtn';
+import { Jokes } from './jokes'
 
-export const FavouriteModal = props =>{
-  const { isActive, toggleActive} = useContext(StateContext);
-  const { type, setFavouritesList,favouritesList,idList, setIdList} = props;
-  console.log(isActive)
-return (
-  isActive ? (
-  <FavouriteMobile className="modalSubstrate" onClick={(e)=>e.target.classList.value.includes("modalSubstrate") && toggleActive()}>
-    <ModalContent>
-    <FavouriteMobBtn/> 
-      <Jokes jokesList={favouritesList!=='null' ? favouritesList : null}
-              type={"favourite"} 
-              setFavouritesList={setFavouritesList} 
-              idList={idList} 
-              setIdList={setIdList}/>
-    </ModalContent>         
-</FavouriteMobile>) : null
-)
+export const FavouriteModal = props => {
+  const { isActive, toggleActive } = useContext(StateContext);
+  const { type, setFavouritesList, favouritesList, idList, setIdList } = props;
+
+  return (
+    isActive ? (
+      <FavouriteMobile
+        className="modalSubstrate"
+        onClick={(e) => e.target.classList.value.includes("modalSubstrate") && toggleActive()}>
+        <ModalContent>
+          <FavouriteMobBtn />
+          <Jokes
+            jokesList={favouritesList !== 'null' ? favouritesList : null}
+            type={"favourite"}
+            setFavouritesList={setFavouritesList}
+            idList={idList}
+            setIdList={setIdList} />
+        </ModalContent>
+      </FavouriteMobile>) : null
+  )
 }
 
 const FavouriteMobile = styled.div`
