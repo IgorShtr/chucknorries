@@ -1,21 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 
-import { mediaTablet, mediaMobile, mediaDesktop } from '../globalStyles/mediaBreakPoints'
-import { StateContext, ActionState } from '../components/stateContext';
+import { mediaTablet, mediaMobile} from '../globalStyles/mediaBreakPoints'
+import { ActionState } from '../components/stateContext';
 import { HeaderMobile } from '../components/headerMobile'
 import { CategoriesList } from '../components/categories';
 import { Jokes } from '../components/jokes';
-// import {FavouriteMobBtn} from '../components/favouriteBtn';
 import { FavouriteModal } from '../components/FavoriteModal'
 
 
 
 
 export const MainView = (props) => {
-  const { isActive } = useContext(StateContext);
+
 
   const [jokesList, setJokesList] = useState([]);
   const [isCategoriesShown, setIsCategoriesShown] = useState(false);

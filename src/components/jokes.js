@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import Heart from './images/heart.png';
@@ -72,7 +72,7 @@ export const Jokes = props => {
           <MainText type={type} >{value}</MainText>
           <BottomSection type={type}>
             <p>Last update:{Math.floor(hoursPast)} hours ago</p>
-            {(categories != undefined) && (categories.length) ? <div>{categories[0]}</div> : null}
+            {(categories !== undefined) && (categories.length) ? <div>{categories[0]}</div> : null}
           </BottomSection>
         </MainSection>
       </JokeContainer>)
